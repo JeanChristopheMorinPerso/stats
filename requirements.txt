@@ -1,0 +1,3 @@
+clickhouse-connect
+pandas>=2
+tabulate
