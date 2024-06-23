@@ -1,4 +1,5 @@
--- Returns all issues that I created in GitHub.
+-- title: My issues created in GitHub
+-- description: List of all issues that I created on GitHub.
 SELECT
     concat('https://github.com/', repo_name, '/issues/', number) as URL,
     title AS Title,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import re
 import argparse
 
 import jinja2
@@ -11,7 +12,7 @@ env = jinja2.Environment(
 template = env.get_template("index.html.in")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("query_file")
+parser.add_argument("files", nargs="+")
 
 args = parser.parse_args()
 
@@ -25,19 +26,48 @@ client = clickhouse_connect.get_client(
 )
 
 
-def readQuery(name: str) -> str:
+def readQuery(name: str) -> tuple[str, str, str]:
     with open(name) as fd:
         query = fd.read()
-    return query
+
+    data = {}
+
+    title = None
+    description_lines = []
+
+    for line in query.split("\n"):
+        if match := re.match(r"^--\s+title\:\s+(?P<text>.*)$", line):
+            if title:
+                raise ValueError(f"Multiple titles found for {name}")
+            title = match.group("text")
+        elif match := re.match(r"^--\s+description\:\s+(?P<text>.*)$", line):
+            description_lines.append(match.group("text"))
+
+    print(title)
+    if not title:
+        raise ValueError(f"No title found for {name}")
+    if not description_lines:
+        raise ValueError(f"No description found for {name}")
+
+    return title.strip(), " ".join(description_lines).strip(), query.strip()
 
 
-query = readQuery(args.query_file)
-df: pandas.DataFrame = client.query_df(query=query)
-# breakpoint()
-# print(df.to_csv(index=False))
+stats = []
+for queryfile in args.files:
+    title, description, query = readQuery(queryfile)
+    df: pandas.DataFrame = client.query_df(query=query)
 
-headers = df.columns.tolist()
-rows = df.values.tolist()
+    headers = df.columns.tolist()
+    rows = df.values.tolist()
+    stats.append(
+        {
+            "title": title,
+            "description": description,
+            "query": query,
+            "headers": headers,
+            "data": rows,
+        }
+    )
 
 with open("index.html", "w") as fd:
-    fd.write(template.render(headers=headers, rows=rows, query=query.strip()))
+    fd.write(template.render(stats=stats))

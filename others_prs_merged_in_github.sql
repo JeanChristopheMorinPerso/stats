@@ -1,4 +1,5 @@
--- Returns all PRs that I merged in GitHub that were not authored by me.
+-- title: Non-authored PRs merged on GitHub
+-- description: List of all PRs that I merged on GitHub that were not authored by me.
 SELECT
     concat('https://github.com/', repo_name, '/pull/', toString(number)) AS URL,
     title AS Title,
