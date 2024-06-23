@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 import argparse
 
+import jinja2
 import pandas
 import clickhouse_connect
+
+env = jinja2.Environment(
+    loader=jinja2.FileSystemLoader("."), trim_blocks=True, lstrip_blocks=True
+)
+template = env.get_template("index.html.in")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("query_file")
@@ -25,5 +31,13 @@ def readQuery(name: str) -> str:
     return query
 
 
-df: pandas.DataFrame = client.query_df(query=readQuery(args.query_file))
-print(df.to_markdown(index=False, tablefmt="github"))
+query = readQuery(args.query_file)
+df: pandas.DataFrame = client.query_df(query=query)
+# breakpoint()
+# print(df.to_csv(index=False))
+
+headers = df.columns.tolist()
+rows = df.values.tolist()
+
+with open("index.html", "w") as fd:
+    fd.write(template.render(headers=headers, rows=rows, query=query.strip()))

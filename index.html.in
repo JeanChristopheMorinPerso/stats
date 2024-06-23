@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"/>
+    </head>
+    <body>
+        <!-- https://github.com/picocss/pico/discussions/482#discussioncomment-9043725 -->
+        <style>
+            :root {
+                --pico-font-size: 87.5%;
+                /* Original: 100% */
+                --pico-line-height: 1.25;
+            }
+            pre>code {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            @media (min-width: 576px) {
+                :root {
+                    --pico-font-size: 87.5%;
+                    /* Original: 106.25% */
+                }
+            }
+
+            @media (min-width: 768px) {
+                :root {
+                    --pico-font-size: 87.5%;
+                    /* Original: 112.5% */
+                }
+            }
+
+            @media (min-width: 1024px) {
+                :root {
+                    --pico-font-size: 87.5%;
+                    /* Original: 118.75% */
+                }
+            }
+
+            @media (min-width: 1280px) {
+                :root {
+                    --pico-font-size: 87.5%;
+                    /* Original: 125% */
+                }
+            }
+
+            @media (min-width: 1536px) {
+                :root {
+                    --pico-font-size: 87.5%;
+                    /* Original: 131.25% */
+                }
+            }
+        </style>
+        <main>
+            <details>
+                <summary>Click to see the SQL query</summary>
+                <pre>
+                    <code>{{ query | escape }}</code>
+                </pre>
+            </details>
+        </main>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    {% for header in headers %}
+                    <th scope="col">{{ header | escape }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td scope="row">{{ loop.index }}</td> 
+                    {% for column in row %}
+                    {% if column is string and column.startswith("http") %}
+                    <td scope="row"><a href="{{ column | escape }}">{{ column | escape }}</a></td>
+                    {% else %}
+                    <td scope="row">{{ column | escape }}</td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

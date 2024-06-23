@@ -1,7 +1,7 @@
 -- Returns all PRs that I authored and eventually got merged in GitHub.
 SELECT
     concat('https://github.com/', repo_name, '/pull/', toString(number)) AS URL,
-    title, created_at, merged_at
+    title AS Title, created_at AS "Created At", merged_at AS "Merged At"
 FROM (
     SELECT *
     FROM (
