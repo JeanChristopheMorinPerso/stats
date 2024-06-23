@@ -1,5 +1,6 @@
+-- Returns all issues that I created in GitHub.
 SELECT
-    concat('https://github.com/', repo_name, '/issue/', number) as url,
+    concat('https://github.com/', repo_name, '/issues/', number) as url,
     title,
     created_at
 FROM github_events
