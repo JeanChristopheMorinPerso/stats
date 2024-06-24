@@ -31,10 +31,10 @@ class Query:
     title: str
     description: str
     sortBy: str
-    pruneFields: list[str]
-    filters: list[Filter]
-    flattenKeys: list[str]
     query: str
+    pruneFields: list[str] | None = None
+    filters: list[Filter] | None = None
+    flattenKeys: list[str] | None = None
 
 
 def readQueryFromFile(name: str) -> Query:
@@ -77,6 +77,10 @@ def readQueryFromFile(name: str) -> Query:
                     f"Invalid filter keys {list(filter.keys())!r} for {name}"
                 )
 
+            if filter["operator"] not in ("==",):
+                raise ValueError(
+                    f"Invalid filter operator {filter['operator']} for {name}"
+                )
             filters.append(Filter(**filter))
         elif match := re.match(r"^#\s+flatten\:\s+(?P<flatten>.*)$", line):
             flattenKeys.append(match.group("flatten"))
@@ -91,13 +95,13 @@ def readQueryFromFile(name: str) -> Query:
         raise ValueError(f"No sortBy found for {name}")
 
     return Query(
-        title=title.strip(),
-        description=" ".join(description_lines).strip(),
-        sortBy=sortBy.strip(),
+        title.strip(),
+        " ".join(description_lines).strip(),
+        sortBy.strip(),
+        "\n".join(queryLines).strip(),
         pruneFields=pruneFields,
         filters=filters,
         flattenKeys=flattenKeys,
-        query="\n".join(queryLines).strip(),
     )
 
 
