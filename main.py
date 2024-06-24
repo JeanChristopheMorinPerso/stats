@@ -175,6 +175,11 @@ async def main():
                 hasNextPage = result["search"]["pageInfo"]["hasNextPage"]
                 page += 1
 
+        if not data:
+            raise ValueError(
+                f"No data returned for {queryfile}, something must be wrong with the query!"
+            )
+
         headers = list(data[0].keys())
 
         # 1. Filter convert fields and filter rows
@@ -208,7 +213,6 @@ async def main():
                 "headers": [key.replace("__", " ") for key in headers],
             }
         )
-        # breakpoint()
 
     with open("index.html", "w") as fd:
         fd.write(

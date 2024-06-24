@@ -8,7 +8,7 @@ query ($endCursor: String) {
   search(
     # Filtering out Anaconda to avoid SSO errors.
     # Filtering out 'rodeofx/python-api' since it's working related. Same for AnacondaRecipes.
-    query: "is:pr is:merged author:JeanChristopheMorinPerso -org:AnacondaRecipes -org:Anaconda -repo:rodeofx/python-api"
+    query: "is:pr is:public is:merged author:JeanChristopheMorinPerso -org:AnacondaRecipes -org:Anaconda -repo:rodeofx/python-api"
     type: ISSUE
     first: 100
     after: $endCursor
