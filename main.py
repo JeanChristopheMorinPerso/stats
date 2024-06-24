@@ -23,6 +23,10 @@ if os.environ.get("GITHUB_TOKEN"):
 else:
     TOKEN = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
 
+REPO_URL = "https://github.com/JeanChristopheMorinPerso/stats"
+if os.environ.get("GITHUB_REPOSITORY"):
+    REPO_URL = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}"
+
 
 @dataclasses.dataclass
 class Filter:
@@ -154,7 +158,6 @@ async def main():
                 print(f"Querying page {page}")
 
                 result = await gh.graphql(query.query, endCursor=endCursor)
-
                 for edge in result["search"]["edges"]:
                     edge = edge["node"]
 
@@ -218,7 +221,8 @@ async def main():
         fd.write(
             template.render(
                 stats=stats,
-                timestamp=datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
+                timestamp=datetime.datetime.now(tz=datetime.timezone.utc),
+                repoURL=REPO_URL,
             )
         )
 

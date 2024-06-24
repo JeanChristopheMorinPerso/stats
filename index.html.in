@@ -14,7 +14,13 @@
         </style>
         <main>
             <p>
-                This page shows some of my open source stats. The data was generated at {{ timestamp }}.
+                This page shows some of my open source stats. The source code lives in <a href="{{ repoURL }}">{{ repoURL }}</a>.
+            <p>
+            <p>
+                I mainly use it to keep track of what I do in the open source world. Kind of my open source history if you will.
+            </p>
+            <p>
+                This page was generated on {{ timestamp.strftime("%B %d %Y, at %H:%M:%S %Z") }}.
             </p>
             <ul>
                 {% for stat in stats %}
