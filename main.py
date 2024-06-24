@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import re
 import ast
 import copy
@@ -17,7 +18,10 @@ import gidgethub.aiohttp
 # https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests
 # https://docs.github.com/en/search-github/github-code-search/understanding-github-code-search-syntax#language-qualifier
 
-TOKEN = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
+if os.environ.get("GITHUB_TOKEN"):
+    TOKEN = os.environ["GITHUB_TOKEN"]
+else:
+    TOKEN = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
 
 
 @dataclasses.dataclass
