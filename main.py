@@ -13,6 +13,7 @@ import jinja2
 import aiohttp
 import gidgethub.aiohttp
 
+# https://docs.github.com/en/graphql/overview/explorer
 # https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests
 # https://docs.github.com/en/search-github/github-code-search/understanding-github-code-search-syntax#language-qualifier
 
