@@ -14,7 +14,7 @@
         </style>
         <main>
             <p>
-                This page shows some of my open source stats.
+                This page shows some of my open source stats. The data was generated at {{ timestamp }}.
             </p>
             <ul>
                 {% for stat in stats %}

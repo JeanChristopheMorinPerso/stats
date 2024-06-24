@@ -1,0 +1,31 @@
+# title: My PRs merged on GitHub
+# description: List of all PRs that I authored and eventually got merged on GitHub.
+# sortBy: Created__At
+query ($endCursor: String) {
+  search(
+    # Filtering out Anaconda to avoid SSO errors.
+    # Filtering out 'rodeofx/python-api' since it's working related. Same for AnacondaRecipes.
+    query: "is:pr is:merged author:JeanChristopheMorinPerso -org:AnacondaRecipes -org:Anaconda -repo:rodeofx/python-api"
+    type: ISSUE
+    first: 100
+    after: $endCursor
+  ) {
+    edges {
+      node {
+        ... on PullRequest {
+          URL: url
+          Title: title
+          Created__At: createdAt
+          Merged__At: mergedAt
+          #comments {
+          #  totalCount
+          #}
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

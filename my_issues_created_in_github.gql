@@ -1,0 +1,32 @@
+# title: My issues created in GitHub
+# description: List of all issues that I created on GitHub.
+# sortBy: Created__At
+# flatten: Comments.totalCount
+query ($endCursor: String) {
+  search(
+    # Filtering out Anaconda to avoid SSO errors.
+    # Filtering out 'rodeofx/python-api' since it's working related. Same for AnacondaRecipes.
+    query: "is:issue author:JeanChristopheMorinPerso -org:AnacondaRecipes -org:Anaconda"
+    type: ISSUE
+    first: 100
+    after: $endCursor
+  ) {
+    edges {
+      node {
+        ... on Issue {
+          URL: url
+          Title: title
+          Created__At: createdAt
+          State: state
+          Comments: comments {
+            totalCount
+          }
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
