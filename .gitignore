@@ -1,3 +1,8 @@
 *.py[cdo]
 /.vscode
 /.venv
+.coverage
+/htmlcov
+index.html
+.pytest_cache
+__pycache__
